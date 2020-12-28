@@ -1,0 +1,69 @@
+body {
+    background-image: url("pexels-photo-1103970.jpeg");
+}
+
+.content {
+    background-color: rgb(60, 75, 97, 0.5);
+    margin: 5vh;
+    padding: 5vh;
+    color: white;
+    border-radius: 3vh;
+   
+}
+.requests-dashboard {
+    overflow: scroll;
+    padding: 2vh;
+    max-height: 50vh;
+}
+.bg-dark2 {
+    background-color: rgb(60, 75, 97);
+    display: flex;
+    justify-content: flex-start;
+    color: white;
+    padding: 1vw;
+    top: 25%;
+    
+}
+.table-hover {
+    background-color: rgb(35, 42, 53 , 0.8)!important;
+    
+}
+td {
+    background-color: rgb(35, 42, 53, 0.5)!important;
+}
+
+
+.navbar-brand2{
+
+    color: white;
+    text-decoration: none;
+    font-family: 'Russo One', sans-serif;
+}
+
+.navbar-brand2:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.btn-primary {
+    margin: 3vh;
+    background-color: rgb(60, 75, 97); 
+    border-color:  rgb(60, 75, 97); 
+}
+.btn-primary:hover {
+    margin: 3vh;
+    background-color: rgb(92, 113, 145); 
+    border-color:  rgb(92, 113, 145); 
+}
+div::-webkit-scrollbar
+{
+    height: 1vw;
+
+}
+
+div::-webkit-scrollbar-thumb
+{
+    background-color: rgba(255, 255, 255, 0.8);
+
+
+}

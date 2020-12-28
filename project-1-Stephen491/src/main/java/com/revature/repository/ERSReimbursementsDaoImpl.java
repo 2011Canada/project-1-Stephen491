@@ -1,0 +1,87 @@
+package com.revature.repository;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.postgresql.util.PSQLException;
+
+import com.revature.models.Reimbursement;
+import com.revature.util.DatabaseConnectionPostgres;
+
+public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
+	
+	DatabaseConnectionPostgres dbConn = DatabaseConnectionPostgres.getConnectionFactory();
+	Connection conn = dbConn.getConnection();
+	
+	public List<Reimbursement> getAllPendingReimbursements() {
+		return null;
+	}
+
+	public List<Reimbursement> getCurrentUserReimbursements(int userid) {
+		String sql = "select reimb_id, reimb_amount, reimb_submitted, reimb_resolved, reimb_description, reimb_recept, reimb_author, reimb_resolver, "
+				+ "ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status from reimbursement.ers_reimbursement "
+				+ "join reimbursement.ers_reimbursement_status on (ers_reimbursement.reimb_status_id=ers_reimbursement_status.reimb_status_id) "
+				+ "join reimbursement.ers_reimbursement_type on (ers_reimbursement.reimb_type_id=ers_reimbursement_type.reimb_type_id) where reimb_author = ?";
+		ArrayList<Reimbursement> reimbursements = new ArrayList<>();
+		try {
+			PreparedStatement st = conn.prepareStatement(sql); 
+			
+			st.setInt(1, userid);
+			
+			ResultSet results = st.executeQuery();
+			
+			while(results.next()) {
+				Reimbursement reimb = new Reimbursement(); 
+
+				reimb.setId(results.getInt("reimb_id"));
+				reimb.setAmount(results.getDouble("reimb_amount"));
+				reimb.setDescription(results.getString("reimb_description"));
+				reimb.setDateSubmitted(results.getTimestamp("reimb_submitted"));
+				reimb.setDateResolved(results.getTimestamp("reimb_resolved"));
+				reimb.setAuthor(results.getInt("reimb_author"));
+				reimb.setResolver(results.getInt("reimb_resolver"));
+				reimb.setStatus_id(results.getInt("reimb_status_id"));
+				reimb.setStatus(results.getString("reimb_status"));
+				reimb.setType_id(results.getInt("reimb_type_id"));
+				reimb.setType(results.getString("reimb_type"));
+				reimbursements.add(reimb);
+
+			}
+	
+		}
+		catch(PSQLException e) {
+			e.printStackTrace();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return reimbursements;
+	}
+
+	public Reimbursement getReimbursement(int reimb_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean resolveReimbursement(int reimb_id, boolean decision) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public List<Reimbursement> getReimbursementsByStatus(int status_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean addReimbursement(Reimbursement reimb) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+
+}

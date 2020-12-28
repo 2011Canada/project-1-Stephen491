@@ -1,0 +1,62 @@
+
+body {
+    background-image: url("pexels-photo-1103970.jpeg");
+}
+
+.login-container{
+    display: block;
+    margin-top: 25vh;
+    
+    max-width: 100vw;
+    width: 40vw;
+    position: absolute;
+    
+  
+}
+.form-control{
+    max-width: 100vw;
+    
+    height: 8vh!important;
+}
+
+.login-btn{
+    margin-top: 3vh;
+    width: 40vw;
+    height: 7vh;
+}
+
+.elements{
+    display: block;
+    position: absolute;
+    left: 30%;
+    
+}
+.bg-dark2 {
+    background-color: rgb(60, 75, 97);
+    display: flex;
+    justify-content: flex-start;
+    color: white;
+    padding: 1vw;
+    top: 25%;
+    
+}
+.navbar-brand2{
+
+    color: white;
+    text-decoration: none;
+    font-family: 'Russo One', sans-serif;
+}
+
+.navbar-brand2:hover {
+    text-decoration: none;
+    color: white;
+}
+#login-error {
+    background-color: rgb(167, 37, 37);
+    color: white;
+    padding: 3vh;
+    border-radius: 1vh;
+    margin-bottom: 5vh;
+    display: none;
+}
+
