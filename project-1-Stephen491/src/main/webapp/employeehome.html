@@ -21,6 +21,7 @@
             <button type="button" class="btn btn-danger" onClick="logout()">Logout</button>
         </nav>
         <div class = "content" >
+            <h5 id="welcome-tag"></h5>
             <button type="button" class="btn btn-primary btn-lg" id="toggle-requests-button" onClick= "toggleRequests()">Show resolved requests</button>
 
             <button type="button" class="btn btn-primary btn-lg" id="leave-form-button" onClick= "leaveForm()">Go back</button>
@@ -41,7 +42,7 @@
                         
                         </tr>
                     </thead>
-                    <tbody class="pending-reimbursements-table-body">
+                    <tbody id="pending-reimbursements-table-body">
                        
                     </tbody>
                 </table>

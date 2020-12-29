@@ -40,13 +40,15 @@ function toggleRequests() {
 
 }
 
-function leaveForm() {
+async function leaveForm() {
     let toggleRequests = document.getElementById("toggle-requests-button")
     let pendingRequestsTable = document.getElementById("pending-reimbursements-table")
     let goBackButton = document.getElementById("leave-form-button")
     let form = document.getElementById("new-reimbursement-form");
     let createReimbursementButton = document.getElementById("create-reimbursement")
     let resolvedRequestsTable = document.getElementById("resolved-reimbursements-table")
+    clearTableData() 
+    await getReimbursementTableData()
 
     form.style.display = "none";
     toggleRequests.style.display = "block";
@@ -102,17 +104,30 @@ async function getReimbursementTableData() {
     console.log("called")
     let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements")
     let bodyjson = await res.json()
-    
+    console.log(bodyjson);
     bodyjson.forEach(insertNewRow)
 
 
 
 }
+
+
+function clearTableData() {
+ 
+   if (document.getElementById("pending-reimbursements-table-body")) {
+        document.getElementById("pending-reimbursements-table-body").innerHTML = '';
+   }
+   if (document.getElementById("resolved-reimbursements-table-body")) {
+        document.getElementById("resolved-reimbursements-table-body").innerHTML = '';
+   }
+
+}
+
 function insertNewRow(data) {
     
-    if(data.status_id !== 3) {
+    if(data.status_id !== 3 && data.status_id !==4) {
         
-        let table = document.getElementById("pending-reimbursements-table")
+        let table = document.getElementById("pending-reimbursements-table-body")
         let newRow = table.insertRow();
         let id_cell = newRow.insertCell();
         let amount_cell = newRow.insertCell();
@@ -128,7 +143,7 @@ function insertNewRow(data) {
         let typeText = document.createTextNode(data.type);
         let descriptionText = document.createTextNode(data.description);
         let statusText = document.createTextNode(data.status);
-        let receptsText = document.createTextNode(data.receipts);
+        let receiptsText = document.createTextNode(data.receipts);
 
         id_cell.appendChild(idText);
         amount_cell.appendChild(amountText);
@@ -136,14 +151,18 @@ function insertNewRow(data) {
         type_cell.appendChild(typeText);
         description_cell.appendChild(descriptionText);
         status_cell.appendChild(statusText);
-        receptsText.appendChild(receiptsText);
+        
+    
 
        
     }
+
+    //add resolved data
 }
 
 
 async function handleFormSubmit() {
+
     
     let formData = {
         amount: document.getElementById("amount-field").value,
@@ -152,22 +171,27 @@ async function handleFormSubmit() {
         receipt: document.getElementById("file-selector").value
     }
 
-
-    try {
-        let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements",
-        {method: "POST",
-        credentials: "include",
-        body: JSON.stringify(formData),
-        headers:{
-            "Content-Type": "application/json"
-        }})
-        console.log(res)
-        leaveForm();
+    if(formData.amount&&formData.type_id&&formData.description) {
+        try {
+            let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements",
+            {method: "POST",
+            credentials: "include",
+            body: JSON.stringify(formData),
+            headers:{
+                "Content-Type": "application/json"
+            }})
+            console.log(res)
+            leaveForm();
+            
+        }
+        catch(e)
+        {
+            console.log(e)
+            leaveForm();
+        }    
     }
-    catch(e)
-    {
-        console.log(e)
-        leaveForm();
-    }    
+    else {
+        console.log("Please fill all of the information.")
+    }
 
 }
