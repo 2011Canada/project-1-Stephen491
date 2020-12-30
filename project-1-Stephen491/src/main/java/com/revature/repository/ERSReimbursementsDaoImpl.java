@@ -12,6 +12,7 @@ import java.util.List;
 import org.postgresql.util.PSQLException;
 
 import com.revature.models.Reimbursement;
+import com.revature.models.ReimbursementStatusUpdate;
 import com.revature.util.DatabaseConnectionPostgres;
 
 public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
@@ -156,6 +157,28 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 		return Notcompleted;
 		
 		
+	}
+	
+	public boolean updateReimbursementStatus(int resolver, int status, int reimb_id, Timestamp resolved) {
+		String sql = "update reimbursement.ers_reimbursement set reimb_status_id = ?, reimb_resolver= ?, reimb_resolved = ? where reimb_id = ?;";
+		
+		boolean Notcompleted = false;
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, status);
+			st.setInt(2, resolver);
+			st.setTimestamp(3, resolved);
+			st.setInt(4, reimb_id);
+			
+			return (st.executeUpdate()==1);
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return Notcompleted;
+		
+
 	}
 	
 

@@ -79,14 +79,15 @@ public class AuthFilter extends HttpFilter{
 				
 				}//switch method
 				break;
-			case "/financemanagerhome.html":
+			case "/financialmanagerhome.html":
 				switch(req.getMethod()) {
 				case "GET": {
-					System.out.println("Tried");
+					
 					if(req.getSession().getAttribute("role_id")==null) {
 						res.sendError(401);
 					}
 					else if((int)req.getSession().getAttribute("role_id")==1) {
+						
 						res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
 				        res.setHeader("Pragma", "no-cache"); 
 				        res.setDateHeader("Expires", 0); 
@@ -100,6 +101,50 @@ public class AuthFilter extends HttpFilter{
 		
 		}//switch method
 		break;
+			case "/financialmanagerhome.css":
+				switch(req.getMethod()) {
+				case "GET": {
+					
+					if(req.getSession().getAttribute("role_id")==null) {
+						res.sendError(401);
+					}
+					else if((int)req.getSession().getAttribute("role_id")==1) {
+						
+						res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+				        res.setHeader("Pragma", "no-cache"); 
+				        res.setDateHeader("Expires", 0); 
+						chain.doFilter(req, res);
+					}
+					else {
+						res.sendError(403);
+					}
+					break;
+			}
+		
+		}//switch method
+			break;
+			case "/financialmanagerhome.js":
+				switch(req.getMethod()) {
+				case "GET": {
+					
+					if(req.getSession().getAttribute("role_id")==null) {
+						res.sendError(401);
+					}
+					else if((int)req.getSession().getAttribute("role_id")==1) {
+						
+						res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+				        res.setHeader("Pragma", "no-cache"); 
+				        res.setDateHeader("Expires", 0); 
+						chain.doFilter(req, res);
+					}
+					else {
+						res.sendError(403);
+					}
+					break;
+			}
+		
+		}//switch method
+				break;
 		}//switch location
 		
 	

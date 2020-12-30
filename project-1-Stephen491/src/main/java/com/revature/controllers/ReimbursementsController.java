@@ -88,13 +88,51 @@ public class ReimbursementsController {
 			res.sendError(403);
 		}
 			
+	
+	}
+	public void handleFMGet(HttpServletRequest req, HttpServletResponse res) throws IOException{
+		if(req.getSession().getAttribute("role_id")==null) {
+			res.sendError(401);
+		}
+		else if((int)req.getSession().getAttribute("role_id")==1) {
+			List<Reimbursement> list = ersReimbursementDao.getAllReimbursements();
+			String listToSend = gson.toJson(list);
+			res.setStatus(200);
+			res.getWriter().write(listToSend);
 			
 			
+		}
+		else if(!((int)req.getSession().getAttribute("role_id")==1)) {
+			res.sendError(403);
+		}
+		else {
+			res.sendError(403);
+		}
+
+			
+	}
+	public void handleFMPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
+		if(req.getSession().getAttribute("role_id")==null) {
+			res.sendError(401);
+		}
+		else if((int)req.getSession().getAttribute("role_id")==1) {
+			int author = (int)req.getSession().getAttribute("userid");
+			//TO DO
 			
 			
 			
 			
 		}
-		
+		else if(!((int)req.getSession().getAttribute("role_id")==1)) {
+			res.sendError(403);
+		}
+		else {
+			res.sendError(403);
+		}
+
+			
 	}
+	
+		
+}
 

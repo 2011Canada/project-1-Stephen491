@@ -42,7 +42,6 @@ import com.revature.controllers.ReimbursementsController;
 				case "/": {
 					switch (req.getMethod()) {
 						case "GET": {
-							System.out.println("ran");
 							System.out.println(req.getSession());
 							System.out.println(req.getSession().getAttribute("role_id"));
 							if(req.getSession().getAttribute("role_id")==null) {
@@ -52,7 +51,7 @@ import com.revature.controllers.ReimbursementsController;
 								res.sendRedirect("http://localhost:8080/project-1-Stephen491/employeehome.html");
 							}
 							else if((int)req.getSession().getAttribute("role_id")==1) {
-								res.sendRedirect("http://localhost:8080/project-1-Stephen491/financemanagerhome.html");
+								res.sendRedirect("http://localhost:8080/project-1-Stephen491/financialmanagerhome.html");
 							}
 							else{
 								res.sendRedirect("http://localhost:8080/project-1-Stephen491/login.html");
@@ -145,6 +144,64 @@ import com.revature.controllers.ReimbursementsController;
 						case "POST":{
 							System.out.println("reimb in front controller");
 							reimbursementsController.handlePost(req, res);
+							break;
+						}
+						case "PUT":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						case "DELETE":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						default:{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+					}
+					break;
+				}
+				case "/allreimbursements": {
+					switch (req.getMethod()) {
+						case "GET":{
+							reimbursementsController.handleFMGet(req, res);
+							break;
+						}
+						case "POST":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						case "PUT":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						case "DELETE":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						default:{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+					}
+					break;
+				}
+				case "/updatereimbursements": {
+					switch (req.getMethod()) {
+						case "GET":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						case "POST":{
+							reimbursementsController.handleFMPost(req, res);
 							break;
 						}
 						case "PUT":{

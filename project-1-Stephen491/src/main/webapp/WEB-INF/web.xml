@@ -49,6 +49,11 @@
     <servlet-name>default</servlet-name>
     <url-pattern>/financialmanagerhome.js</url-pattern>
 </servlet-mapping>
+<servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/financialmanagerhome.css</url-pattern>
+</servlet-mapping>
+
 
 
 
@@ -75,6 +80,10 @@
 <filter-mapping> 
 	<filter-name>AuthFilter</filter-name>
 	<url-pattern>/financialmanagerhome.js</url-pattern>
+</filter-mapping>
+<filter-mapping> 
+	<filter-name>AuthFilter</filter-name>
+	<url-pattern>/financialmanagerhome.css</url-pattern>
 </filter-mapping>
   
 </web-app>

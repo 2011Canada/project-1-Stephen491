@@ -1,12 +1,10 @@
 
 let onPending;
-
+let currentReimb;
 
 async function setup() {
-    let resolvedRequestsTable = document.getElementById("resolved-reimbursements-table")
     let newReimbursementForm = document.getElementById("new-reimbursement-form")
     newReimbursementForm.style.setProperty("display", "none");
-    resolvedRequestsTable.style.setProperty("display", "none");
     onPending = true; 
     
 
@@ -16,77 +14,47 @@ async function setup() {
 }
 
 
-function toggleRequests() {
-    let button = document.getElementById("toggle-requests-button")
-    let pendingRequestsTable = document.getElementById("pending-reimbursements-table")
-    let resolvedRequestsTable = document.getElementById("resolved-reimbursements-table")
-
-
-    if(button.innerText==="Show resolved requests") {
-        onPending = false;
-        button.innerText = "Show pending requests"
-        pendingRequestsTable.style.setProperty("display", "none");
-        resolvedRequestsTable.style.display = ""
-    }
-    else {
-        onPending = true; 
-        button.innerText = "Show resolved requests"
-        resolvedRequestsTable.style.setProperty("display", "none");
-        pendingRequestsTable.style.display = ""
-
-    }
-
-
-
-}
 
 async function leaveForm() {
-    let toggleRequests = document.getElementById("toggle-requests-button")
-    let pendingRequestsTable = document.getElementById("pending-reimbursements-table")
+    let requestsTable = document.getElementById("reimbursements-table")
     let goBackButton = document.getElementById("leave-form-button")
     let form = document.getElementById("new-reimbursement-form");
-    let createReimbursementButton = document.getElementById("create-reimbursement")
-    let resolvedRequestsTable = document.getElementById("resolved-reimbursements-table")
     clearTableData() 
     await getReimbursementTableData()
 
     form.style.display = "none";
-    toggleRequests.style.display = "block";
     goBackButton.style.display = "none";
-    if(onPending) {
-        pendingRequestsTable.style.display = "";
-    }
-    else {
-        resolvedRequestsTable.style.display = "";
-    }
-    createReimbursementButton.style.display = "block"
+    
+    requestsTable.style.display = "";
+   
 
 }
 
 
-function toggleShowForm() {
-    let toggleRequests = document.getElementById("toggle-requests-button")
-    let button = document.getElementById("create-reimbursement")
+function toggleShowForm(reimburseInfo) {
     let goBackButton = document.getElementById("leave-form-button")
-    let pendingRequestsTable = document.getElementById("pending-reimbursements-table")
-    let resolvedRequestsTable = document.getElementById("resolved-reimbursements-table")
-
-    button.style.display = "none"
+    let requestsTable = document.getElementById("reimbursements-table")
+    let search = document.getElementById("searchStatus")
+    let searchLabel = document.getElementById("search-label")
     goBackButton.style.display = "block";
 
-    if(onPending) {
-        pendingRequestsTable.style.setProperty("display", "none");
+    
+    requestsTable.style.setProperty("display", "none");
+    searchLabel.style.setProperty("display", "none");
+    search.style.setProperty("display", "none")
         
-    }
-    else {
-        resolvedRequestsTable.style.setProperty("display", "none");
-    }
-
     let form = document.getElementById("new-reimbursement-form");
-    form.style.display = ""
-    toggleRequests.style.display = "none";
 
+    document.getElementById("author-id").innerText = reimburseInfo.author;
+    document.getElementById("reimb-amount").innerText = reimburseInfo.amount;
+    document.getElementById("reimb-description").innerText = reimburseInfo.description;
+    document.getElementById("reimb-type").innerText = reimburseInfo.type;
+    document.getElementById("reimb-status").innerText = reimburseInfo.status;
+
+    form.style.display = ""
+    currentReimb = reimburseInfo
 }
+
 async function logout() {
     try {
         let res = await fetch("http://localhost:8080/project-1-Stephen491/logout")
@@ -102,7 +70,7 @@ async function logout() {
 
 async function getReimbursementTableData() {
     console.log("called")
-    let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements")
+    let res = await fetch("http://localhost:8080/project-1-Stephen491/allreimbursements")
     let bodyjson = await res.json()
     console.log(bodyjson);
     bodyjson.forEach(insertNewRow)
@@ -114,26 +82,35 @@ async function getReimbursementTableData() {
 
 function clearTableData() {
  
-   if (document.getElementById("pending-reimbursements-table-body")) {
-        document.getElementById("pending-reimbursements-table-body").innerHTML = '';
-   }
-   if (document.getElementById("resolved-reimbursements-table-body")) {
-        document.getElementById("resolved-reimbursements-table-body").innerHTML = '';
-   }
+  
+    document.getElementById("reimbursements-table-data").innerHTML = '';
+   
 
 }
 
 function insertNewRow(data) {
     
-    if(data.status_id !== 3 && data.status_id !==4) {
+   
         
-        let table = document.getElementById("pending-reimbursements-table-body")
+        let table = document.getElementById("reimbursements-table-data")
         let newRow = table.insertRow();
+        newRow.setAttribute("reimburse-id", data.id)
+        newRow.setAttribute("author", data.author)
+        newRow.setAttribute("status", data.status)
+        newRow.setAttribute("amount", data.amount)
+        newRow.setAttribute("description", data.description)
+        newRow.setAttribute("type", data.type)
+        newRow.setAttribute("onClick", "openOption()")
         let id_cell = newRow.insertCell();
         let amount_cell = newRow.insertCell();
         let submitted_cell = newRow.insertCell();
+        let resolved_cell = newRow.insertCell();
         let type_cell = newRow.insertCell();
         let description_cell = newRow.insertCell();
+        let author_cell = newRow.insertCell();
+      //  let author_email = newRow.insertCell();
+        let resolver_cell = newRow.insertCell();
+ //       let resolver_email_cell = newRow.insertCell();
         let status_cell = newRow.insertCell();
         let receipts_cell = newRow.insertCell();
 
@@ -142,8 +119,23 @@ function insertNewRow(data) {
         let submittedText = document.createTextNode(data.dateSubmitted)
         let typeText = document.createTextNode(data.type);
         let descriptionText = document.createTextNode(data.description);
+        let authorText = document.createTextNode(data.author);
+        let resolverText;
+        if(data.resolver!=0) {
+             resolverText = document.createTextNode(data.resolver)
+        }
+        else {
+            resolverText = document.createTextNode("Pending")
+        }
         let statusText = document.createTextNode(data.status);
         let receiptsText = document.createTextNode(data.receipts);
+        let resolvedText;
+        if(data.resolved) {
+            resolvedText = document.createTextNode(data.resolved)
+        }
+        else {
+            resolvedText = document.createTextNode("Pending")
+        }
 
         id_cell.appendChild(idText);
         amount_cell.appendChild(amountText);
@@ -151,29 +143,27 @@ function insertNewRow(data) {
         type_cell.appendChild(typeText);
         description_cell.appendChild(descriptionText);
         status_cell.appendChild(statusText);
-        
-    
-
+        author_cell.appendChild(authorText);
+        resolver_cell.appendChild(resolverText)
+        resolved_cell.appendChild(resolvedText);
+      
        
-    }
 
     //add resolved data
 }
 
 
-async function handleFormSubmit() {
+async function handleFormSubmit(reimbInfo) {
 
     
     let formData = {
-        amount: document.getElementById("amount-field").value,
-        type_id: document.getElementById("select-type").value,
-        description: document.getElementById("description").value,
-        receipt: document.getElementById("file-selector").value
+        reimb_id: reimbInfo.reimburse-id,
+        status_id: document.getElementById("select-status").value,
     }
 
-    if(formData.amount&&formData.type_id&&formData.description) {
+    if(formData.reimb_id&&formData.status_id) {
         try {
-            let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements",
+            let res = await fetch("http://localhost:8080/project-1-Stephen491/updatereimbursements",
             {method: "POST",
             credentials: "include",
             body: JSON.stringify(formData),
@@ -195,3 +185,38 @@ async function handleFormSubmit() {
     }
 
 }
+
+function filter() {
+
+    var input, filter, table, tr, i;
+    input = document.getElementById("searchStatus");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("reimbursements-table-data");
+    tr = table.getElementsByTagName("tr");
+    
+    for (i = 0; i < tr.length; i++) {
+      if (tr[i].getAttribute("status").toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+
+}
+
+function openOption() {
+    clickedRow = event.target.closest("tr")
+    let reimburseInfo = {
+        "reimburse-id": clickedRow.getAttribute("reimburse-id"),
+        "author": clickedRow.getAttribute("author"),
+        "description": clickedRow.getAttribute("description"),
+        "amount": clickedRow.getAttribute("amount"),
+        "status": clickedRow.getAttribute("status"),
+        "type": clickedRow.getAttribute("type")
+
+    }
+    toggleShowForm(reimburseInfo)
+
+
+}
+

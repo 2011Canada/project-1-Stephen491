@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.revature.models.Reimbursement;
+import com.revature.models.ReimbursementStatusUpdate;
 
 public interface ERSReimbursementsDao {
 	public List<Reimbursement> getAllReimbursements();
@@ -15,6 +16,6 @@ public interface ERSReimbursementsDao {
 	public List<Reimbursement> getReimbursementsByStatus(int status_id);
 	public boolean addReimbursement(Reimbursement reimb);
 	public boolean addReimbursement(double amount, String description, Timestamp dateSubmitted, int author, int status_id, int type_id);
-	
+	public boolean updateReimbursementStatus(int resolver, int status, int reimb_id, Timestamp resolved);
 	
 }
