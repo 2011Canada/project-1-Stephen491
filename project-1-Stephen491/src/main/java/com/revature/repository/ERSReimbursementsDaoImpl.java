@@ -24,11 +24,14 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 	
 	
 	public List<Reimbursement> getAllReimbursements() {
-		String sql = "select reimb_id, reimb_amount, reimb_submitted, reimb_resolved, reimb_description, reimb_recept, reimb_author, reimb_resolver, "
-				+ "ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status from reimbursement.ers_reimbursement "
-				+ "join reimbursement.ers_reimbursement_status on (ers_reimbursement.reimb_status_id=ers_reimbursement_status.reimb_status_id) "
-				
-				+ "join reimbursement.ers_reimbursement_type on (ers_reimbursement.reimb_type_id=ers_reimbursement_type.reimb_type_id);";
+		String sql = "select reimb_id, reimb_amount, reimb_author, auth.ers_username as author_username, auth.user_first_name as author_first_name, auth.user_last_name as author_last_name,"
+				+"auth.user_email as author_email , reimb_resolver, res.ers_username as resolver_username, res.user_first_name as resolver_first_name, res.user_last_name as resolver_last_name, res.user_email as resolver_email, "
+				+"reimb_submitted, reimb_resolved, reimb_description, reimb_recept, ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status "
+				+"from reimbursement.ers_reimbursement "
+				+"join reimbursement.ers_reimbursement_status on (ers_reimbursement.reimb_status_id=ers_reimbursement_status.reimb_status_id) "
+				+"join reimbursement.ers_reimbursement_type on (ers_reimbursement.reimb_type_id=ers_reimbursement_type.reimb_type_id) "
+				+"left join reimbursement.ers_users auth on (ers_reimbursement.reimb_author=auth.ers_users_id) "
+				+"left join reimbursement.ers_users res on (ers_reimbursement.reimb_resolver=res.ers_users_id); ";
 		ArrayList<Reimbursement> reimbursements = new ArrayList<>();
 		try {
 			PreparedStatement st = conn.prepareStatement(sql); 
@@ -44,7 +47,15 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 				reimb.setDateSubmitted(results.getTimestamp("reimb_submitted"));
 				reimb.setDateResolved(results.getTimestamp("reimb_resolved"));
 				reimb.setAuthor(results.getInt("reimb_author"));
+				reimb.setAuthor_username(results.getString("author_username"));
+				reimb.setAuthor_firstName(results.getString("author_first_name"));
+				reimb.setAuthor_lastName(results.getString("author_last_name"));
+				reimb.setAuthor_email(results.getString("author_email"));
 				reimb.setResolver(results.getInt("reimb_resolver"));
+				reimb.setResolver_username(results.getString("resolver_username"));
+				reimb.setResolver_firstName(results.getString("resolver_first_name"));
+				reimb.setResolver_lastName(results.getString("resolver_last_name"));
+				reimb.setResolver_email(results.getString("resolver_email"));
 				reimb.setStatus_id(results.getInt("reimb_status_id"));
 				reimb.setStatus(results.getString("reimb_status"));
 				reimb.setType_id(results.getInt("reimb_type_id"));
@@ -74,10 +85,15 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 	}
 
 	public List<Reimbursement> getCurrentUserReimbursements(int userid) {
-		String sql = "select reimb_id, reimb_amount, reimb_submitted, reimb_resolved, reimb_description, reimb_recept, reimb_author, reimb_resolver, "
-				+ "ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status from reimbursement.ers_reimbursement "
-				+ "join reimbursement.ers_reimbursement_status on (ers_reimbursement.reimb_status_id=ers_reimbursement_status.reimb_status_id) "
-				+ "join reimbursement.ers_reimbursement_type on (ers_reimbursement.reimb_type_id=ers_reimbursement_type.reimb_type_id) where reimb_author = ?";
+		String sql = "select reimb_id, reimb_amount, reimb_author, auth.ers_username as author_username, auth.user_first_name as author_first_name, auth.user_last_name as author_last_name,"
+				+"auth.user_email as author_email , reimb_resolver, res.ers_username as resolver_username, res.user_first_name as resolver_first_name, res.user_last_name as resolver_last_name, res.user_email as resolver_email, "
+				+"reimb_submitted, reimb_resolved, reimb_description, reimb_recept, ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status "
+				+"from reimbursement.ers_reimbursement "
+				+"join reimbursement.ers_reimbursement_status on (ers_reimbursement.reimb_status_id=ers_reimbursement_status.reimb_status_id) "
+				+"join reimbursement.ers_reimbursement_type on (ers_reimbursement.reimb_type_id=ers_reimbursement_type.reimb_type_id) "
+				+"left join reimbursement.ers_users auth on (ers_reimbursement.reimb_author=auth.ers_users_id) "
+				+"left join reimbursement.ers_users res on (ers_reimbursement.reimb_resolver=res.ers_users_id) where reimb_author = ?; ";
+		
 		ArrayList<Reimbursement> reimbursements = new ArrayList<>();
 		try {
 			PreparedStatement st = conn.prepareStatement(sql); 
@@ -95,7 +111,15 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 				reimb.setDateSubmitted(results.getTimestamp("reimb_submitted"));
 				reimb.setDateResolved(results.getTimestamp("reimb_resolved"));
 				reimb.setAuthor(results.getInt("reimb_author"));
+				reimb.setAuthor_username(results.getString("author_username"));
+				reimb.setAuthor_firstName(results.getString("author_first_name"));
+				reimb.setAuthor_lastName(results.getString("author_last_name"));
+				reimb.setAuthor_email(results.getString("author_email"));
 				reimb.setResolver(results.getInt("reimb_resolver"));
+				reimb.setResolver_username(results.getString("resolver_username"));
+				reimb.setResolver_firstName(results.getString("resolver_first_name"));
+				reimb.setResolver_lastName(results.getString("resolver_last_name"));
+				reimb.setResolver_email(results.getString("resolver_email"));
 				reimb.setStatus_id(results.getInt("reimb_status_id"));
 				reimb.setStatus(results.getString("reimb_status"));
 				reimb.setType_id(results.getInt("reimb_type_id"));

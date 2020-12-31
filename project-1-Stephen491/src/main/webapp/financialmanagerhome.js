@@ -116,9 +116,16 @@ function insertNewRow(data) {
         let type_cell = newRow.insertCell();
         let description_cell = newRow.insertCell();
         let author_cell = newRow.insertCell();
-      //  let author_email = newRow.insertCell();
+        let author_username = newRow.insertCell();
+        let author_fullname = newRow.insertCell();
+        let author_email = newRow.insertCell();
+
         let resolver_cell = newRow.insertCell();
- //       let resolver_email_cell = newRow.insertCell();
+        let resolver_username = newRow.insertCell();
+        let resolver_fullname = newRow.insertCell();
+        let resolver_email = newRow.insertCell();
+
+
         let status_cell = newRow.insertCell();
         let receipts_cell = newRow.insertCell();
 
