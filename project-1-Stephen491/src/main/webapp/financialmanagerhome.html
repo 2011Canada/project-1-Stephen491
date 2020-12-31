@@ -78,15 +78,15 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleFormControlSelect1">Update Status</label>
-                  <select class="form-control" id="select-status" name = type>
-                    <option>Pending</option>
-                    <option>Put on hold</option>
-                    <option>Accept</option>
-                    <option>Reject</option>
+                  <select class="form-control" id="select-status" name = "status">
+                    <option value = 1>Pending</option>
+                    <option value = 2>Put on hold</option>
+                    <option value = 3>Accept</option>
+                    <option value = 4>Reject</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <button type="button" class="btn btn-primary btn-lg" id="submit-reimbursement" onClick="submit()">Submit Update</button>
+                <div class="menu">
+                  <button type="button" class="btn btn-primary btn-lg" id="submit-reimbursement" onClick="handleUpdateSubmit()">Submit Update</button>
                 </div>
               </form>
             </div>

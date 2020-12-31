@@ -156,6 +156,51 @@ function insertNewRow(data) {
 
        
     }
+    else {
+        let table = document.getElementById("resolved-reimbursements-table-body")
+        let newRow = table.insertRow();
+        let id_cell = newRow.insertCell();
+        let amount_cell = newRow.insertCell();
+        let submitted_cell = newRow.insertCell();
+        let resolved_cell = newRow.insertCell();
+        let type_cell = newRow.insertCell();
+        let description_cell = newRow.insertCell();
+        let resolver_cell = newRow.insertCell();
+ //       let resolver_email_cell = newRow.insertCell();
+        let status_cell = newRow.insertCell();
+        let receipts_cell = newRow.insertCell();
+
+        let idText = document.createTextNode(data.id);
+        let amountText = document.createTextNode(data.amount);
+        let submittedText = document.createTextNode(data.dateSubmitted)
+        let typeText = document.createTextNode(data.type);
+        let descriptionText = document.createTextNode(data.description);
+        let resolverText;
+        if(data.resolver!=0) {
+             resolverText = document.createTextNode(data.resolver)
+        }
+        else {
+            resolverText = document.createTextNode("Pending")
+        }
+        let statusText = document.createTextNode(data.status);
+        let receiptsText = document.createTextNode(data.receipts);
+        let resolvedText;
+        if(data.dateResolved) {
+            resolvedText = document.createTextNode(data.dateResolved)
+        }
+        else {
+            resolvedText = document.createTextNode("Pending")
+        }
+
+        id_cell.appendChild(idText);
+        amount_cell.appendChild(amountText);
+        submitted_cell.appendChild(submittedText);
+        type_cell.appendChild(typeText);
+        description_cell.appendChild(descriptionText);
+        status_cell.appendChild(statusText);
+        resolver_cell.appendChild(resolverText)
+        resolved_cell.appendChild(resolvedText);
+    }
 
     //add resolved data
 }

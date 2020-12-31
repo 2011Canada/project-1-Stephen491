@@ -3,7 +3,6 @@ package com.revature.models;
 public class ReimbursementStatusUpdate {
 	private int status_id;
 	private int reimb_id;
-	private int resolver;
 	
 	
 	public int getStatus_id() {
@@ -27,11 +26,11 @@ public class ReimbursementStatusUpdate {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	@Override
+	
 	public String toString() {
 		return "ReimbursementStatusUpdate [status_id=" + status_id + ", reimb_id=" + reimb_id + "]";
 	}
-	@Override
+	
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -39,7 +38,7 @@ public class ReimbursementStatusUpdate {
 		result = prime * result + status_id;
 		return result;
 	}
-	@Override
+	
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

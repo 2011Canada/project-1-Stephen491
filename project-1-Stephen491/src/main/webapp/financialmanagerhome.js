@@ -19,6 +19,11 @@ async function leaveForm() {
     let requestsTable = document.getElementById("reimbursements-table")
     let goBackButton = document.getElementById("leave-form-button")
     let form = document.getElementById("new-reimbursement-form");
+    let searchLabel = document.getElementById("search-label");
+    let searchInput = document.getElementById("searchStatus"); 
+
+
+
     clearTableData() 
     await getReimbursementTableData()
 
@@ -26,8 +31,11 @@ async function leaveForm() {
     goBackButton.style.display = "none";
     
     requestsTable.style.display = "";
-   
 
+    searchLabel.style.display = "";
+    searchInput.style.display = "";
+   
+    currentReimb = null;
 }
 
 
@@ -130,8 +138,8 @@ function insertNewRow(data) {
         let statusText = document.createTextNode(data.status);
         let receiptsText = document.createTextNode(data.receipts);
         let resolvedText;
-        if(data.resolved) {
-            resolvedText = document.createTextNode(data.resolved)
+        if(data.dateResolved) {
+            resolvedText = document.createTextNode(data.dateResolved)
         }
         else {
             resolvedText = document.createTextNode("Pending")
@@ -153,14 +161,16 @@ function insertNewRow(data) {
 }
 
 
-async function handleFormSubmit(reimbInfo) {
-
+async function handleUpdateSubmit() {
     
+    console.log("Update submitted")
+    console.log("blah")
     let formData = {
-        reimb_id: reimbInfo.reimburse-id,
         status_id: document.getElementById("select-status").value,
+        reimb_id: currentReimb.reimburse_id
     }
 
+    console.log(formData)
     if(formData.reimb_id&&formData.status_id) {
         try {
             let res = await fetch("http://localhost:8080/project-1-Stephen491/updatereimbursements",
@@ -170,6 +180,7 @@ async function handleFormSubmit(reimbInfo) {
             headers:{
                 "Content-Type": "application/json"
             }})
+            console.log(currentReimb)
             console.log(res)
             leaveForm();
             
@@ -207,7 +218,7 @@ function filter() {
 function openOption() {
     clickedRow = event.target.closest("tr")
     let reimburseInfo = {
-        "reimburse-id": clickedRow.getAttribute("reimburse-id"),
+        "reimburse_id": clickedRow.getAttribute("reimburse-id"),
         "author": clickedRow.getAttribute("author"),
         "description": clickedRow.getAttribute("description"),
         "amount": clickedRow.getAttribute("amount"),

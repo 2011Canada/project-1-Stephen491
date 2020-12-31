@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.revature.models.Reimbursement;
 import com.revature.models.ReimbursementForm;
+import com.revature.models.ReimbursementStatusUpdate;
 import com.revature.repository.ERSReimbursementStatusDAO;
 import com.revature.repository.ERSReimbursementStatusDAOImpl;
 import com.revature.repository.ERSReimbursementTypeDAO;
@@ -91,6 +92,7 @@ public class ReimbursementsController {
 	
 	}
 	public void handleFMGet(HttpServletRequest req, HttpServletResponse res) throws IOException{
+		//Needs to also get author first/last name, author username, author email, resolver first and last name, and resolver email
 		if(req.getSession().getAttribute("role_id")==null) {
 			res.sendError(401);
 		}
@@ -116,8 +118,21 @@ public class ReimbursementsController {
 			res.sendError(401);
 		}
 		else if((int)req.getSession().getAttribute("role_id")==1) {
-			int author = (int)req.getSession().getAttribute("userid");
-			//TO DO
+			System.out.println("Update reimburse called");
+			ReimbursementStatusUpdate reimb = om.readValue(req.getInputStream(), ReimbursementStatusUpdate.class);
+			System.out.println("Update reimburse called2");
+			int resolver = (int)req.getSession().getAttribute("userid");
+			int reimb_id = reimb.getReimb_id();
+			int status_id = reimb.getStatus_id();
+			Timestamp solved = new Timestamp(System.currentTimeMillis()); 
+			
+			if(ersReimbursementDao.updateReimbursementStatus(resolver, status_id, reimb_id, solved)) {
+				System.out.println("Reimbursement status updated");
+			}
+			else {
+				System.out.println("Oops something went wrong!");
+			}
+			
 			
 			
 			
