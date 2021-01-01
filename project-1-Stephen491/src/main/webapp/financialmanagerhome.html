@@ -21,7 +21,9 @@
             <button type="button" class="btn btn-danger" onClick="logout()">Logout</button>
         </nav>
         <div class = "content" >
-
+          <div class="feedback" id="feedback">
+            <p id = "feedback-text"></p>
+          </div>
             <button type="button" class="btn btn-primary btn-lg" id="leave-form-button" onClick= "leaveForm()">Go back</button>
 
 
@@ -32,7 +34,7 @@
                     <input type="text" class="search" name="searchStatus" onKeyUp="filter()" id="searchStatus">
                     <thead>
                         <tr>
-                        <th scope="col">ID</th>
+                        <th scope="col">Reimbursement ID</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Submitted</th>
                         <th scope="col">Resolved</th>

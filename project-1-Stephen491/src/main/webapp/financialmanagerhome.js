@@ -116,14 +116,14 @@ function insertNewRow(data) {
         let type_cell = newRow.insertCell();
         let description_cell = newRow.insertCell();
         let author_cell = newRow.insertCell();
-        let author_username = newRow.insertCell();
-        let author_fullname = newRow.insertCell();
-        let author_email = newRow.insertCell();
+        let author_username_cell = newRow.insertCell();
+        let author_fullname_cell = newRow.insertCell();
+        let author_email_cell = newRow.insertCell();
 
         let resolver_cell = newRow.insertCell();
-        let resolver_username = newRow.insertCell();
-        let resolver_fullname = newRow.insertCell();
-        let resolver_email = newRow.insertCell();
+        let resolver_username_cell = newRow.insertCell();
+        let resolver_fullname_cell = newRow.insertCell();
+        let resolver_email_cell = newRow.insertCell();
 
 
         let status_cell = newRow.insertCell();
@@ -135,12 +135,24 @@ function insertNewRow(data) {
         let typeText = document.createTextNode(data.type);
         let descriptionText = document.createTextNode(data.description);
         let authorText = document.createTextNode(data.author);
+        let authorUsername = document.createTextNode(data.author_username);
+        let authorFullName = document.createTextNode(data.author_firstName+" "+data.author_lastName)
+        let authorEmail = document.createTextNode(data.author_email)
         let resolverText;
+        let resolverUsername;
+        let resolverFullName;
+        let resolverEmail;
         if(data.resolver!=0) {
              resolverText = document.createTextNode(data.resolver)
+             resolverUsername = document.createTextNode(data.resolver_username)
+             resolverFullName = document.createTextNode(data.resolver_firstName+" "+data.resolver_lastName)
+             resolverEmail = document.createTextNode(data.resolver_email)
         }
         else {
             resolverText = document.createTextNode("Pending")
+            resolverUsername = document.createTextNode("pending");
+            resolverFullName = document.createTextNode("pending");
+            resolverEmail = document.createTextNode("pending");
         }
         let statusText = document.createTextNode(data.status);
         let receiptsText = document.createTextNode(data.receipts);
@@ -159,7 +171,13 @@ function insertNewRow(data) {
         description_cell.appendChild(descriptionText);
         status_cell.appendChild(statusText);
         author_cell.appendChild(authorText);
+        author_username_cell.appendChild(authorUsername)
+        author_fullname_cell.appendChild(authorFullName)
+        author_email_cell.appendChild(authorEmail)
         resolver_cell.appendChild(resolverText)
+        resolver_username_cell.appendChild(resolverUsername)
+        resolver_fullname_cell.appendChild(resolverFullName)
+        resolver_email_cell.appendChild(resolverEmail)
         resolved_cell.appendChild(resolvedText);
       
        

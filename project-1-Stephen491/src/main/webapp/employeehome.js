@@ -165,8 +165,10 @@ function insertNewRow(data) {
         let resolved_cell = newRow.insertCell();
         let type_cell = newRow.insertCell();
         let description_cell = newRow.insertCell();
-        let resolver_cell = newRow.insertCell();
- //       let resolver_email_cell = newRow.insertCell();
+      
+        let resolver_username_cell = newRow.insertCell();
+        let resolver_fullname_cell = newRow.insertCell();
+        let resolver_email_cell = newRow.insertCell();
         let status_cell = newRow.insertCell();
         let receipts_cell = newRow.insertCell();
 
@@ -175,12 +177,15 @@ function insertNewRow(data) {
         let submittedText = document.createTextNode(data.dateSubmitted)
         let typeText = document.createTextNode(data.type);
         let descriptionText = document.createTextNode(data.description);
-        let resolverText;
+     
+        let resolverUsername;
+        let resolverFullName;
+        let resolverEmail;
         if(data.resolver!=0) {
-             resolverText = document.createTextNode(data.resolver)
-        }
-        else {
-            resolverText = document.createTextNode("Pending")
+           
+             resolverUsername = document.createTextNode(data.resolver_username)
+             resolverFullName = document.createTextNode(data.resolver_firstName+" "+data.resolver_lastName)
+             resolverEmail = document.createTextNode(data.resolver_email)
         }
         let statusText = document.createTextNode(data.status);
         let receiptsText = document.createTextNode(data.receipts);
@@ -198,8 +203,12 @@ function insertNewRow(data) {
         type_cell.appendChild(typeText);
         description_cell.appendChild(descriptionText);
         status_cell.appendChild(statusText);
-        resolver_cell.appendChild(resolverText)
+    
+        resolver_username_cell.appendChild(resolverUsername)
+        resolver_fullname_cell.appendChild(resolverFullName)
+        resolver_email_cell.appendChild(resolverEmail)
         resolved_cell.appendChild(resolvedText);
+
     }
 
     //add resolved data
