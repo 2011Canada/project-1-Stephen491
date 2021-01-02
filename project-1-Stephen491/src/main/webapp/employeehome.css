@@ -24,12 +24,12 @@ body {
     top: 25%;
     
 }
-.table-hover {
-    background-color: rgb(35, 42, 53 , 0.8)!important;
+.table-hover tbody tr:hover td {
+    background-color: rgba(54, 68, 94, 0.8);
     
 }
-td {
-    background-color: rgb(35, 42, 53, 0.5)!important;
+td:hover {
+    background-color: rgba(124, 174, 255, 0.5)!important;
 }
 
 
@@ -78,6 +78,9 @@ div::-webkit-scrollbar-thumb
 
 #resolved-reimbursements-table {
    
+}
+#feedback {
+    display: none;
 }
 
 #leave-form-button {

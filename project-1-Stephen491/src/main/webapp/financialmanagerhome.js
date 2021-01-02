@@ -6,7 +6,6 @@ async function setup() {
     let newReimbursementForm = document.getElementById("new-reimbursement-form")
     newReimbursementForm.style.setProperty("display", "none");
     onPending = true; 
-    
 
     await getReimbursementTableData()
     
@@ -46,7 +45,7 @@ function toggleShowForm(reimburseInfo) {
     let searchLabel = document.getElementById("search-label")
     goBackButton.style.display = "block";
 
-    
+    document.getElementById("feedback").style.display = "none";
     requestsTable.style.setProperty("display", "none");
     searchLabel.style.setProperty("display", "none");
     search.style.setProperty("display", "none")
@@ -205,8 +204,17 @@ async function handleUpdateSubmit() {
             headers:{
                 "Content-Type": "application/json"
             }})
-            console.log(currentReimb)
-            console.log(res)
+            if(res.status==200) {
+                
+                document.getElementById("feedback-text").innerText = "Reimbursement update has been successfully submitted."
+                document.getElementById("feedback").style.setProperty("display", "block");
+                document.getElementById("feedback").style.setProperty("background-color", "rgb(50, 168, 84)");
+            }
+            else {
+                document.getElementById("feedback-text").innerText = "An error has occured, please try again."
+                document.getElementById("feedback").style.setProperty("display", "block");
+                document.getElementById("feedback").style.setProperty("background-color", "rgb(168, 54, 50)");
+            }
             leaveForm();
             
         }
@@ -255,4 +263,8 @@ function openOption() {
 
 
 }
+
+
+   
+
 

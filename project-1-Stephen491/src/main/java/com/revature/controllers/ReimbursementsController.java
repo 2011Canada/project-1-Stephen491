@@ -42,7 +42,9 @@ public class ReimbursementsController {
 			int author = (int)req.getSession().getAttribute("userid");
 			String reimbStatusString = ersReimbursementStatusDao.getStatusName(1);
 			
-			ersReimbursementDao.addReimbursement(reimb.getAmount(), reimb.getDescription(), dateSubmitted, author, 1, reimb.getType_id());
+			if(ersReimbursementDao.addReimbursement(reimb.getAmount(), reimb.getDescription(), dateSubmitted, author, 1, reimb.getType_id())) {
+				res.setStatus(200);
+			}
 			
 			
 			
@@ -128,6 +130,7 @@ public class ReimbursementsController {
 			
 			if(ersReimbursementDao.updateReimbursementStatus(resolver, status_id, reimb_id, solved)) {
 				System.out.println("Reimbursement status updated");
+				res.setStatus(200);
 			}
 			else {
 				System.out.println("Oops something went wrong!");

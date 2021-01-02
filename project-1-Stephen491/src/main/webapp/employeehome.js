@@ -8,10 +8,8 @@ async function setup() {
     newReimbursementForm.style.setProperty("display", "none");
     resolvedRequestsTable.style.setProperty("display", "none");
     onPending = true; 
-    
 
     await getReimbursementTableData()
-    
     //post request to get data
 }
 
@@ -36,7 +34,7 @@ function toggleRequests() {
 
     }
 
-
+    document.getElementById("feedback").style.setProperty("display", "none");
 
 }
 
@@ -85,6 +83,7 @@ function toggleShowForm() {
     let form = document.getElementById("new-reimbursement-form");
     form.style.display = ""
     toggleRequests.style.display = "none";
+    document.getElementById("feedback").style.display = "none";
 
 }
 async function logout() {
@@ -234,7 +233,16 @@ async function handleFormSubmit() {
             headers:{
                 "Content-Type": "application/json"
             }})
-            console.log(res)
+            if(res.status==200) {
+                document.getElementById("feedback").style.setProperty("display", "block");
+                document.getElementById("feedback-text").innerText = "Reimbursement request has been successfully submitted."
+                document.getElementById("feedback").style.setProperty("background-color", "rgb(50, 168, 84)");
+            }
+            else {
+                document.getElementById("feedback").style.setProperty("display", "block");
+                document.getElementById("feedback-text").innerText = "An error has occured, please try again."
+                document.getElementById("feedback").style.setProperty("background-color", "rgb(168, 54, 50)");
+            }
             leaveForm();
             
         }
