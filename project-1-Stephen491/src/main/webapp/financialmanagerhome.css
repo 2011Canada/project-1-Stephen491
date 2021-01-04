@@ -93,3 +93,8 @@ div::-webkit-scrollbar-thumb
 #file-selector {
     margin: 1vw;
 }
+#download-receipt:hover,
+#download-receipt.hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

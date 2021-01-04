@@ -62,9 +62,12 @@ function toggleShowForm(reimburseInfo) {
         console.log(reimburseInfo.hasReceipt)
         document.getElementById("download-receipt").innerText = "Download uploaded receipt"
         document.getElementById("download-receipt").setAttribute("onClick", "downloadReceipt()")
+        document.getElementById("download-receipt").classList.add('hover')
+        console.log("updated")
     }
     else {
         document.getElementById("download-receipt").innerText = ""
+        document.getElementById("download-receipt").classList.remove('hover')
     }
 
     form.style.display = ""

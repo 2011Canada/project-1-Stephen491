@@ -147,9 +147,9 @@ function insertNewRow(data) {
         let statusText = document.createTextNode(data.status);
         let receiptsText = document.createTextNode("No Receipt");
         if(data.hasReceipt) {
-            receiptsText = document.createTextNode("Has receipt")
+            receiptsText = document.createTextNode("Get receipt")
             receipts_cell.setAttribute("onClick", "downloadReceipt()")
-
+            receipts_cell.classList.add('hover')
         }
 
         id_cell.appendChild(idText);
@@ -179,6 +179,7 @@ function insertNewRow(data) {
         let resolver_email_cell = newRow.insertCell();
         let status_cell = newRow.insertCell();
         let receipts_cell = newRow.insertCell();
+        
 
         let idText = document.createTextNode(data.id);
         let amountText = document.createTextNode(data.amount);
@@ -187,10 +188,10 @@ function insertNewRow(data) {
         let descriptionText = document.createTextNode(data.description);
         let receiptsText = document.createTextNode("");
         if(data.hasReceipt) {
-            receiptsText = document.createTextNode("Has receipt")
+            receiptsText = document.createTextNode("Get receipt")
             receipts_cell.setAttribute("onClick", "downloadReceipt()")
-
-
+            receipts_cell.classList.add('hover')
+           
         }
      
         let resolverUsername;
