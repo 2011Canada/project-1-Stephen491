@@ -1,5 +1,6 @@
 package com.revature.models;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 
@@ -20,21 +21,14 @@ public class Reimbursement {
 	private String resolver_lastName;
 	private String resolver_email;
 	private int status_id;
+	private boolean hasReceipt;
 	
-	@Override
-	public String toString() {
-		return "Reimbursement [id=" + id + ", amount=" + amount + ", description=" + description + ", dateSubmitted="
-				+ dateSubmitted + ", dateResolved=" + dateResolved + ", author=" + author + ", author_username="
-				+ author_username + ", author_firstName=" + author_firstName + ", author_lastName=" + author_lastName
-				+ ", author_email=" + author_email + ", resolver=" + resolver + ", resolver_username="
-				+ resolver_username + ", resolver_firstName=" + resolver_firstName + ", resolver_lastName="
-				+ resolver_lastName + ", resolver_email=" + resolver_email + ", status_id=" + status_id + ", status="
-				+ status + ", type_id=" + type_id + ", type=" + type + "]";
-	}
+	
+	
 	public Reimbursement(int id, double amount, String description, Timestamp dateSubmitted, Timestamp dateResolved,
 			int author, String author_username, String author_firstName, String author_lastName, String author_email,
 			int resolver, String resolver_username, String resolver_firstName, String resolver_lastName,
-			String resolver_email, int status_id, String status, int type_id, String type) {
+			String resolver_email, int status_id, boolean hasReceipt, String status, int type_id, String type) {
 		super();
 		this.id = id;
 		this.amount = amount;
@@ -52,10 +46,58 @@ public class Reimbursement {
 		this.resolver_lastName = resolver_lastName;
 		this.resolver_email = resolver_email;
 		this.status_id = status_id;
+		this.hasReceipt = hasReceipt;
 		this.status = status;
 		this.type_id = type_id;
 		this.type = type;
 	}
+
+	public boolean isHasReceipt() {
+		return hasReceipt;
+	}
+
+	public void setHasReceipt(boolean hasReceipt) {
+		this.hasReceipt = hasReceipt;
+	}
+
+	public Reimbursement(int id, double amount, String description, Timestamp dateSubmitted, Timestamp dateResolved,
+			int author, String author_username, String author_firstName, String author_lastName, String author_email,
+			int resolver, String resolver_username, String resolver_firstName, String resolver_lastName,
+			String resolver_email, int status_id,  String status, int type_id, String type) {
+		super();
+		this.id = id;
+		this.amount = amount;
+		this.description = description;
+		this.dateSubmitted = dateSubmitted;
+		this.dateResolved = dateResolved;
+		this.author = author;
+		this.author_username = author_username;
+		this.author_firstName = author_firstName;
+		this.author_lastName = author_lastName;
+		this.author_email = author_email;
+		this.resolver = resolver;
+		this.resolver_username = resolver_username;
+		this.resolver_firstName = resolver_firstName;
+		this.resolver_lastName = resolver_lastName;
+		this.resolver_email = resolver_email;
+		this.status_id = status_id;
+	
+		this.status = status;
+		this.type_id = type_id;
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "Reimbursement [id=" + id + ", amount=" + amount + ", description=" + description + ", dateSubmitted="
+				+ dateSubmitted + ", dateResolved=" + dateResolved + ", author=" + author + ", author_username="
+				+ author_username + ", author_firstName=" + author_firstName + ", author_lastName=" + author_lastName
+				+ ", author_email=" + author_email + ", resolver=" + resolver + ", resolver_username="
+				+ resolver_username + ", resolver_firstName=" + resolver_firstName + ", resolver_lastName="
+				+ resolver_lastName + ", resolver_email=" + resolver_email + ", status_id=" + status_id
+				+ ", hasReceipt=" + hasReceipt + ", status=" + status + ", type_id=" + type_id + ", type=" + type + "]";
+	}
+
 	public String getAuthor_username() {
 		return author_username;
 	}
@@ -206,6 +248,7 @@ public class Reimbursement {
 		result = prime * result + ((dateResolved == null) ? 0 : dateResolved.hashCode());
 		result = prime * result + ((dateSubmitted == null) ? 0 : dateSubmitted.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + (hasReceipt ? 1231 : 1237);
 		result = prime * result + id;
 		result = prime * result + resolver;
 		result = prime * result + ((resolver_email == null) ? 0 : resolver_email.hashCode());
@@ -265,6 +308,8 @@ public class Reimbursement {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
+			return false;
+		if (hasReceipt != other.hasReceipt)
 			return false;
 		if (id != other.id)
 			return false;

@@ -128,6 +128,8 @@ function insertNewRow(data) {
         
         let table = document.getElementById("pending-reimbursements-table-body")
         let newRow = table.insertRow();
+        newRow.setAttribute("reimburse-id", data.id)
+        newRow.setAttribute("author", data.author)
         let id_cell = newRow.insertCell();
         let amount_cell = newRow.insertCell();
         let submitted_cell = newRow.insertCell();
@@ -135,6 +137,7 @@ function insertNewRow(data) {
         let description_cell = newRow.insertCell();
         let status_cell = newRow.insertCell();
         let receipts_cell = newRow.insertCell();
+        
 
         let idText = document.createTextNode(data.id);
         let amountText = document.createTextNode(data.amount);
@@ -142,7 +145,12 @@ function insertNewRow(data) {
         let typeText = document.createTextNode(data.type);
         let descriptionText = document.createTextNode(data.description);
         let statusText = document.createTextNode(data.status);
-        let receiptsText = document.createTextNode(data.receipts);
+        let receiptsText = document.createTextNode("No Receipt");
+        if(data.hasReceipt) {
+            receiptsText = document.createTextNode("Has receipt")
+            receipts_cell.setAttribute("onClick", "downloadReceipt()")
+
+        }
 
         id_cell.appendChild(idText);
         amount_cell.appendChild(amountText);
@@ -150,7 +158,7 @@ function insertNewRow(data) {
         type_cell.appendChild(typeText);
         description_cell.appendChild(descriptionText);
         status_cell.appendChild(statusText);
-        
+        receipts_cell.appendChild(receiptsText)
     
 
        
@@ -158,13 +166,14 @@ function insertNewRow(data) {
     else {
         let table = document.getElementById("resolved-reimbursements-table-body")
         let newRow = table.insertRow();
+        newRow.setAttribute("reimburse-id", data.id)
+        newRow.setAttribute("author", data.author)
         let id_cell = newRow.insertCell();
         let amount_cell = newRow.insertCell();
         let submitted_cell = newRow.insertCell();
         let resolved_cell = newRow.insertCell();
         let type_cell = newRow.insertCell();
         let description_cell = newRow.insertCell();
-      
         let resolver_username_cell = newRow.insertCell();
         let resolver_fullname_cell = newRow.insertCell();
         let resolver_email_cell = newRow.insertCell();
@@ -176,6 +185,13 @@ function insertNewRow(data) {
         let submittedText = document.createTextNode(data.dateSubmitted)
         let typeText = document.createTextNode(data.type);
         let descriptionText = document.createTextNode(data.description);
+        let receiptsText = document.createTextNode("");
+        if(data.hasReceipt) {
+            receiptsText = document.createTextNode("Has receipt")
+            receipts_cell.setAttribute("onClick", "downloadReceipt()")
+
+
+        }
      
         let resolverUsername;
         let resolverFullName;
@@ -187,7 +203,6 @@ function insertNewRow(data) {
              resolverEmail = document.createTextNode(data.resolver_email)
         }
         let statusText = document.createTextNode(data.status);
-        let receiptsText = document.createTextNode(data.receipts);
         let resolvedText;
         if(data.dateResolved) {
             resolvedText = document.createTextNode(data.dateResolved)
@@ -202,7 +217,7 @@ function insertNewRow(data) {
         type_cell.appendChild(typeText);
         description_cell.appendChild(descriptionText);
         status_cell.appendChild(statusText);
-    
+        receipts_cell.appendChild(receiptsText)
         resolver_username_cell.appendChild(resolverUsername)
         resolver_fullname_cell.appendChild(resolverFullName)
         resolver_email_cell.appendChild(resolverEmail)
@@ -221,39 +236,135 @@ async function handleFormSubmit() {
         amount: document.getElementById("amount-field").value,
         type_id: document.getElementById("select-type").value,
         description: document.getElementById("description").value,
-        receipt: document.getElementById("file-selector").value
+        receipt: document.getElementById("file-selector").files[0]
     }
-
-    if(formData.amount&&formData.type_id&&formData.description) {
-        try {
-            let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements",
-            {method: "POST",
-            credentials: "include",
-            body: JSON.stringify(formData),
-            headers:{
-                "Content-Type": "application/json"
-            }})
-            if(res.status==200) {
-                document.getElementById("feedback").style.setProperty("display", "block");
-                document.getElementById("feedback-text").innerText = "Reimbursement request has been successfully submitted."
-                document.getElementById("feedback").style.setProperty("background-color", "rgb(50, 168, 84)");
+       if(formData.receipt) {
+        let reader = new FileReader(); 
+        let fileByteArray = []
+        reader.onload = async function(evt) {
+            if (evt.target.readyState == reader.DONE) {
+                var arrayBuffer = evt.target.result,
+                    array = new Uint8Array(arrayBuffer);
+                for (var i = 0; i < array.length; i++) {
+                    fileByteArray.push(array[i]);
+                 }
+             }
+            formData.receipt = fileByteArray;
+            console.log(formData.receipt)
+            if(formData.amount&&formData.type_id&&formData.description) {
+                try {
+                    let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements",
+                    {method: "POST",
+                    credentials: "include",
+                    body: JSON.stringify(formData),
+                    headers:{
+                        "Content-Type": "application/json"
+                    }})
+                    if(res.status==200) {
+                        document.getElementById("feedback").style.setProperty("display", "block");
+                        document.getElementById("feedback-text").innerText = "Reimbursement request has been successfully submitted."
+                        document.getElementById("feedback").style.setProperty("background-color", "rgb(50, 168, 84)");
+                    }
+                    else {
+                        document.getElementById("feedback").style.setProperty("display", "block");
+                        document.getElementById("feedback-text").innerText = "An error has occured, please try again."
+                        document.getElementById("feedback").style.setProperty("background-color", "rgb(168, 54, 50)");
+                    }
+                    leaveForm();
+                    
+                }
+                catch(e)
+                {
+                    console.log(e)
+                    leaveForm();
+                }    
             }
             else {
-                document.getElementById("feedback").style.setProperty("display", "block");
-                document.getElementById("feedback-text").innerText = "An error has occured, please try again."
-                document.getElementById("feedback").style.setProperty("background-color", "rgb(168, 54, 50)");
+                console.log("Please fill all of the information.")
             }
-            leaveForm();
-            
+
+
         }
-        catch(e)
-        {
-            console.log(e)
-            leaveForm();
-        }    
+        reader.readAsArrayBuffer(formData.receipt);
+        
     }
     else {
-        console.log("Please fill all of the information.")
+    
+        if(formData.amount&&formData.type_id&&formData.description) {
+            try {
+                let res = await fetch("http://localhost:8080/project-1-Stephen491/reimbursements",
+                {method: "POST",
+                credentials: "include",
+                body: JSON.stringify(formData),
+                headers:{
+                    "Content-Type": "application/json"
+                }})
+                if(res.status==200) {
+                    document.getElementById("feedback").style.setProperty("display", "block");
+                    document.getElementById("feedback-text").innerText = "Reimbursement request has been successfully submitted."
+                    document.getElementById("feedback").style.setProperty("background-color", "rgb(50, 168, 84)");
+                }
+                else {
+                    document.getElementById("feedback").style.setProperty("display", "block");
+                    document.getElementById("feedback-text").innerText = "An error has occured, please try again."
+                    document.getElementById("feedback").style.setProperty("background-color", "rgb(168, 54, 50)");
+                }
+                leaveForm();
+                
+            }
+            catch(e)
+            {
+                console.log(e)
+                leaveForm();
+            }    
+        }
+        else {
+            console.log("Please fill all of the information.")
+        }
+}
+
+}
+
+async function downloadReceipt(){
+    clickedRow = event.target.closest("tr")
+    let receiptQueryInfo = {
+        reimb_owner_id: clickedRow.getAttribute("author"),
+        reimb_id: clickedRow.getAttribute("reimburse-id")
     }
 
+    console.log(receiptQueryInfo)
+    try {
+        let res = await fetch("http://localhost:8080/project-1-Stephen491/receipt",
+        {method: "POST",
+        credentials: "include",
+        body: JSON.stringify(receiptQueryInfo),
+        headers:{
+            "Content-Type": "application/json"
+        }})
+        var blob = await res.blob()
+        var filename = res.headers.get("Content-Disposition").split("filename=")[1];
+      
+        saveData(blob, filename)
+        console.log(blob)
+    
+    }
+       
+    catch(e) {
+        console.log(e)
+    }
+
+
+
+    
+}
+function saveData(blob, fileName) {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+
+    var url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
 }

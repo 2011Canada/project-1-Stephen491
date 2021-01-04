@@ -26,7 +26,7 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 	public List<Reimbursement> getAllReimbursements() {
 		String sql = "select reimb_id, reimb_amount, reimb_author, auth.ers_username as author_username, auth.user_first_name as author_first_name, auth.user_last_name as author_last_name,"
 				+"auth.user_email as author_email , reimb_resolver, res.ers_username as resolver_username, res.user_first_name as resolver_first_name, res.user_last_name as resolver_last_name, res.user_email as resolver_email, "
-				+"reimb_submitted, reimb_resolved, reimb_description, reimb_recept, ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status "
+				+"reimb_submitted, reimb_resolved, reimb_description, reimb_has_receipt, ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status "
 				+"from reimbursement.ers_reimbursement "
 				+"join reimbursement.ers_reimbursement_status on (ers_reimbursement.reimb_status_id=ers_reimbursement_status.reimb_status_id) "
 				+"join reimbursement.ers_reimbursement_type on (ers_reimbursement.reimb_type_id=ers_reimbursement_type.reimb_type_id) "
@@ -60,6 +60,7 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 				reimb.setStatus(results.getString("reimb_status"));
 				reimb.setType_id(results.getInt("reimb_type_id"));
 				reimb.setType(results.getString("reimb_type"));
+				reimb.setHasReceipt(results.getBoolean("reimb_has_receipt"));
 				reimbursements.add(reimb);
 
 			}
@@ -87,7 +88,7 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 	public List<Reimbursement> getCurrentUserReimbursements(int userid) {
 		String sql = "select reimb_id, reimb_amount, reimb_author, auth.ers_username as author_username, auth.user_first_name as author_first_name, auth.user_last_name as author_last_name,"
 				+"auth.user_email as author_email , reimb_resolver, res.ers_username as resolver_username, res.user_first_name as resolver_first_name, res.user_last_name as resolver_last_name, res.user_email as resolver_email, "
-				+"reimb_submitted, reimb_resolved, reimb_description, reimb_recept, ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status "
+				+"reimb_submitted, reimb_resolved, reimb_description, reimb_has_receipt, ers_reimbursement.reimb_status_id, ers_reimbursement.reimb_type_id, reimb_type, reimb_status "
 				+"from reimbursement.ers_reimbursement "
 				+"join reimbursement.ers_reimbursement_status on (ers_reimbursement.reimb_status_id=ers_reimbursement_status.reimb_status_id) "
 				+"join reimbursement.ers_reimbursement_type on (ers_reimbursement.reimb_type_id=ers_reimbursement_type.reimb_type_id) "
@@ -124,6 +125,7 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 				reimb.setStatus(results.getString("reimb_status"));
 				reimb.setType_id(results.getInt("reimb_type_id"));
 				reimb.setType(results.getString("reimb_type"));
+				reimb.setHasReceipt(results.getBoolean("reimb_has_receipt"));
 				reimbursements.add(reimb);
 
 			}
@@ -159,9 +161,9 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 		return false;
 	}
 	
-	public boolean addReimbursement(double amount, String description, Timestamp dateSubmitted, int author, int status_id, int type_id) {
+	public boolean addReimbursement(double amount, String description, Timestamp dateSubmitted, int author, int status_id, int type_id, byte[] receipt, boolean hasReceipt) {
 		String sql = "Insert into reimbursement.ers_reimbursement (reimb_amount, reimb_submitted, reimb_description, reimb_author, "
-				+ "reimb_status_id, reimb_type_id) values (?, ?, ?, ?, ?, ?);";
+				+ "reimb_status_id, reimb_type_id, reimb_receipt, reimb_has_receipt) values (?, ?, ?, ?, ?, ?, ?, ?);";
 		boolean Notcompleted = false;
 		try {
 			PreparedStatement st = conn.prepareStatement(sql);
@@ -171,6 +173,8 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 			st.setInt(4, author);
 			st.setInt(5, status_id);
 			st.setInt(6, type_id);
+			st.setBytes(7, receipt);
+			st.setBoolean(8, hasReceipt);
 			
 			return (st.executeUpdate()==1);
 			
@@ -205,5 +209,27 @@ public class ERSReimbursementsDaoImpl implements ERSReimbursementsDao{
 
 	}
 	
+	public byte[] getReceipt(int reimb_id) {
+		String sql = "select reimb_receipt from reimbursement.ers_reimbursement where reimb_id = ?;"; 
+		byte[] arrayResult = null;
+		ResultSet results;
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, reimb_id);
+			
+			results = st.executeQuery();
+			if(results.next()) {
+				arrayResult = results.getBytes("reimb_receipt");
+			}
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return arrayResult;
+		}
+		
+		return arrayResult;
+	}
+ 	
 
 }

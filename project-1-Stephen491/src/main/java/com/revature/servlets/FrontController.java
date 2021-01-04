@@ -14,6 +14,7 @@ import com.revature.controllers.AuthController;
 import com.revature.controllers.ErrorController;
 import com.revature.controllers.HomeController;
 import com.revature.controllers.LogoutController;
+import com.revature.controllers.ReceiptsController;
 import com.revature.controllers.ReimbursementsController;
 
 
@@ -28,6 +29,8 @@ import com.revature.controllers.ReimbursementsController;
 		private ReimbursementsController reimbursementsController =  new ReimbursementsController();
 		
 		private LogoutController logoutController = new LogoutController();
+		
+		private ReceiptsController receiptsController = new ReceiptsController(); 
 		
 		protected void directControlRouter(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 			//how to get a value from your init params
@@ -202,6 +205,36 @@ import com.revature.controllers.ReimbursementsController;
 						}
 						case "POST":{
 							reimbursementsController.handleFMPost(req, res);
+							break;
+						}
+						case "PUT":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						case "DELETE":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						default:{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+					}
+					break;
+				}
+				case "/receipt": {
+					switch (req.getMethod()) {
+						case "GET":{
+							res.setStatus(400);
+							res.getWriter().write("Method Not Supported");
+							break;
+						}
+						case "POST":{
+
+							receiptsController.handleReceiptRequest(req, res);
 							break;
 						}
 						case "PUT":{

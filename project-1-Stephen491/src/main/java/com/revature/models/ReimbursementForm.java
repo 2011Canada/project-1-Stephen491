@@ -6,7 +6,7 @@ public class ReimbursementForm {
 	private String description;
 	private double amount;
 	private int type_id;
-	private File receipt;
+	private byte[] receipt;
 	public String getDescription() {
 		return description;
 	}
@@ -25,13 +25,13 @@ public class ReimbursementForm {
 	public void setType_id(int type_id) {
 		this.type_id = type_id;
 	}
-	public File getReceipt() {
+	public byte[] getReceipt() {
 		return receipt;
 	}
-	public void setReceipt(File receipt) {
+	public void setReceipt(byte[] receipt) {
 		this.receipt = receipt;
 	}
-	public ReimbursementForm(String description, double amount, int type_id, File receipt) {
+	public ReimbursementForm(String description, double amount, int type_id, byte[] receipt) {
 		super();
 		this.description = description;
 		this.amount = amount;

@@ -3,6 +3,7 @@ let onPending;
 let currentReimb;
 
 async function setup() {
+
     let newReimbursementForm = document.getElementById("new-reimbursement-form")
     newReimbursementForm.style.setProperty("display", "none");
     onPending = true; 
@@ -33,7 +34,7 @@ async function leaveForm() {
 
     searchLabel.style.display = "";
     searchInput.style.display = "";
-   
+    
     currentReimb = null;
 }
 
@@ -57,6 +58,14 @@ function toggleShowForm(reimburseInfo) {
     document.getElementById("reimb-description").innerText = reimburseInfo.description;
     document.getElementById("reimb-type").innerText = reimburseInfo.type;
     document.getElementById("reimb-status").innerText = reimburseInfo.status;
+    if(reimburseInfo.hasReceipt!=="false") {
+        console.log(reimburseInfo.hasReceipt)
+        document.getElementById("download-receipt").innerText = "Download uploaded receipt"
+        document.getElementById("download-receipt").setAttribute("onClick", "downloadReceipt()")
+    }
+    else {
+        document.getElementById("download-receipt").innerText = ""
+    }
 
     form.style.display = ""
     currentReimb = reimburseInfo
@@ -107,6 +116,7 @@ function insertNewRow(data) {
         newRow.setAttribute("amount", data.amount)
         newRow.setAttribute("description", data.description)
         newRow.setAttribute("type", data.type)
+        newRow.setAttribute("hasReceipt", data.hasReceipt)
         newRow.setAttribute("onClick", "openOption()")
         let id_cell = newRow.insertCell();
         let amount_cell = newRow.insertCell();
@@ -118,13 +128,10 @@ function insertNewRow(data) {
         let author_username_cell = newRow.insertCell();
         let author_fullname_cell = newRow.insertCell();
         let author_email_cell = newRow.insertCell();
-
         let resolver_cell = newRow.insertCell();
         let resolver_username_cell = newRow.insertCell();
         let resolver_fullname_cell = newRow.insertCell();
         let resolver_email_cell = newRow.insertCell();
-
-
         let status_cell = newRow.insertCell();
         let receipts_cell = newRow.insertCell();
 
@@ -153,8 +160,12 @@ function insertNewRow(data) {
             resolverFullName = document.createTextNode("pending");
             resolverEmail = document.createTextNode("pending");
         }
-        let statusText = document.createTextNode(data.status);
-        let receiptsText = document.createTextNode(data.receipts);
+        let statusText = document.createTextNode(data.status);  
+        let receiptsText = document.createTextNode("No receipt")
+        if(data.hasReceipt) {
+            receiptsText = document.createTextNode("Has receipt")
+            
+        }
         let resolvedText;
         if(data.dateResolved) {
             resolvedText = document.createTextNode(data.dateResolved)
@@ -178,7 +189,7 @@ function insertNewRow(data) {
         resolver_fullname_cell.appendChild(resolverFullName)
         resolver_email_cell.appendChild(resolverEmail)
         resolved_cell.appendChild(resolvedText);
-      
+        receipts_cell.appendChild(receiptsText)
        
 
     //add resolved data
@@ -256,15 +267,58 @@ function openOption() {
         "description": clickedRow.getAttribute("description"),
         "amount": clickedRow.getAttribute("amount"),
         "status": clickedRow.getAttribute("status"),
-        "type": clickedRow.getAttribute("type")
-
+        "type": clickedRow.getAttribute("type"),
+        "hasReceipt": clickedRow.getAttribute("hasReceipt")
     }
+    console.log("updated2")
     toggleShowForm(reimburseInfo)
 
 
 }
 
+async function downloadReceipt(){
+   
+    let receiptQueryInfo = {
+        reimb_owner_id: currentReimb.author,
+        reimb_id: currentReimb.reimburse_id
+    }
 
+    console.log(receiptQueryInfo)
+    try {
+        let res = await fetch("http://localhost:8080/project-1-Stephen491/receipt",
+        {method: "POST",
+        credentials: "include",
+        body: JSON.stringify(receiptQueryInfo),
+        headers:{
+            "Content-Type": "application/json"
+        }})
+        var blob = await res.blob()
+        var filename = res.headers.get("Content-Disposition").split("filename=")[1];
+      
+        saveData(blob, filename)
+        console.log(blob)
+    
+    }
+       
+    catch(e) {
+        console.log(e)
+    }
+
+
+
+    
+}
+function saveData(blob, fileName) {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+
+    var url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
    
 
 

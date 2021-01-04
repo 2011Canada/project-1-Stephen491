@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -34,15 +35,23 @@ public class ReimbursementsController {
 		}
 		else if((int)req.getSession().getAttribute("role_id")==2) {
 			System.out.println("reimb controller called");
+			String line;
+			
 			ReimbursementForm reimb = om.readValue(req.getInputStream(), ReimbursementForm.class);
 			System.out.println(reimb.getDescription());
 			//insert into database
 			String reimbTypeString = ersReimbursementTypeDao.getTypeName(reimb.getType_id());
 			Timestamp dateSubmitted = new Timestamp(System.currentTimeMillis()); 
+			byte[] receipt = null;
+			boolean hasReceipt = false;
+			if(reimb.getReceipt()!=null) {	
+				receipt = reimb.getReceipt();
+				hasReceipt = true;
+			}
 			int author = (int)req.getSession().getAttribute("userid");
 			String reimbStatusString = ersReimbursementStatusDao.getStatusName(1);
 			
-			if(ersReimbursementDao.addReimbursement(reimb.getAmount(), reimb.getDescription(), dateSubmitted, author, 1, reimb.getType_id())) {
+			if(ersReimbursementDao.addReimbursement(reimb.getAmount(), reimb.getDescription(), dateSubmitted, author, 1, reimb.getType_id(), receipt, hasReceipt)) {
 				res.setStatus(200);
 			}
 			
