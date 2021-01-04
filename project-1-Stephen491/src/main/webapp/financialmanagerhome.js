@@ -69,6 +69,18 @@ function toggleShowForm(reimburseInfo) {
         document.getElementById("download-receipt").innerText = ""
         document.getElementById("download-receipt").classList.remove('hover')
     }
+    console.log("updated5")
+
+    if(reimburseInfo.status==="Approved"||reimburseInfo.status==="Rejected") {
+        console.log(reimburseInfo.status)
+        document.getElementById("status-select").style.setProperty("display", "none")
+        document.getElementById("submit-reimbursement").style.setProperty("display", "none")
+    }
+    else {
+        console.log(reimburseInfo.status)
+        document.getElementById("status-select").style.setProperty("display", "block")
+        document.getElementById("submit-reimbursement").style.setProperty("display", "block")
+    }
 
     form.style.display = ""
     currentReimb = reimburseInfo
