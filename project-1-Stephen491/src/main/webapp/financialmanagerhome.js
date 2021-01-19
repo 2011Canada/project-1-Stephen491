@@ -214,7 +214,6 @@ function insertNewRow(data) {
 async function handleUpdateSubmit() {
     
     console.log("Update submitted")
-    console.log("blah")
     let formData = {
         status_id: document.getElementById("select-status").value,
         reimb_id: currentReimb.reimburse_id
