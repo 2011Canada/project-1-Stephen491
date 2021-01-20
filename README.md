@@ -84,22 +84,21 @@ git clone https://github.com/2011Canada/project-1-Stephen491.git
 
 ## Usage 
 
-* Users can login as either an Employee or as a Manager
+* Users can login as either an employee or as a financial manager
 
 ![](loginpage.png)
-
 
 * Employees can apply for reimbursement
 
 ![](employeepage3.png)
 
-* Employees can view all personal current and past tickets
+* Employees can view all personal current and past requests
 
 ![](employeepage1.png)
 
 * Employees can logout by clicking the logout button at the top right corner
 
-* Financial managers can view all tickets(both current and past) and handle them by clicking on them in the table
+* Financial managers can view all request(both current and past) and handle them by clicking on them in the table
 
 ![](financialmanagerpage1.png)
 
@@ -107,7 +106,7 @@ git clone https://github.com/2011Canada/project-1-Stephen491.git
 
 ![](financialmanagerpage2.png)
 
-* Financial managers can filter by ticket status (pending, on hold, approved, rejected)
+* Financial managers can filter by request status (pending, on hold, approved, rejected)
 
 ![](financialmanagerpage3.png)
 
