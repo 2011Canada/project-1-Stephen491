@@ -2,7 +2,7 @@
 
 ## Project Description
 
-The Superduper Awesome Reimbursement service provides employees with a seamless and intuitive 
+The Superduper Awesome Reimbursement Service provides employees with a seamless and intuitive 
 way to make reimbursement requests to their employer. The employees are able to make requests of
 different varieties for medical, travel, and equipment expenses and upload receipts in a PDF or image format.
 Employees are then able to check the status of the requests they've made. Meanwhile, financial managers are able to
