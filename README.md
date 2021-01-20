@@ -85,4 +85,4 @@ git clone https://github.com/2011Canada/project-1-Stephen491.git
 
 ## License
 
-This project uses the following license: [<GNU GENERAL PUBLIC LICENSE>](<https://www.gnu.org/licenses/gpl-3.0.en.html>)
+This project uses the following license: [GNU GENERAL PUBLIC LICENSE](<https://www.gnu.org/licenses/gpl-3.0.en.html>).
