@@ -101,7 +101,7 @@ git clone https://github.com/2011Canada/project-1-Stephen491.git
 
 * Financial managers can view all tickets(both current and past) and handle them by clicking on them in the table
 
-![](financialmanagerepage1.png)
+![](financialmanagerpage1.png)
 
 * Financial managers can change the status of a request
 
