@@ -43,7 +43,7 @@ could also download the receipts uploaded by the employees.
 ## To-do list:
 
 * Storing passwords in the database as salted hashes
-* Verifying file types of uploaded receipts from the backend 
+* Verifying file types of uploaded receipts from the backend to ensure they are of a valid type
 * Creating an error page for when the user enters in an invalid or unauthorized request to the system 
 
 ## Getting Started
